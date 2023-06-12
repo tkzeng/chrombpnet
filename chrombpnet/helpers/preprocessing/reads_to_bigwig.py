@@ -37,7 +37,7 @@ def generate_bigwig(input_bam_file, input_fragment_file, input_tagalign_file, ou
     elif input_tagalign_file:
         p1 = auto_shift_detect.tagalign_stream(input_tagalign_file)
 
-    cmd = """awk -v OFS="\\t" '{{if ($6=="+"){{print $1,$2{0:+},$3,$4,$5,$6}} else if ($6=="-") {{print $1,$2,$3{1:+},$4,$5,$6}}}}' | sort -k1,1 | bedtools genomecov -bg -5 -i stdin -g {2} | bedtools sort -i stdin """.format(plus_shift_delta, minus_shift_delta, chrom_sizes_file)
+    cmd = """awk -v OFS="\\t" '{{if ($6=="+"){{print $1,$2{0:+},$3,$4,$5,$6}} else if ($6=="-") {{print $1,$2,$3{1:+},$4,$5,$6}}}}' | sort -k1,1 | bedtools genomecov -bg -5 -i stdin -g {2} | bedtools sort -i stdin""".format(plus_shift_delta, minus_shift_delta, chrom_sizes_file)
 
     tmp_bedgraph = tempfile.NamedTemporaryFile()
     print("Making BedGraph")
@@ -65,7 +65,7 @@ def main(args):
             ref_motifs_file = args.DNASE_ref_path
             if ref_motifs_file is None:
                 ref_motifs_file =  get_default_data_path(DefaultDataFile.dnase_ref_motifs)
-    
+
         print("Estimating enzyme shift in input file")
         plus_shift, minus_shift = auto_shift_detect.compute_shift(args.input_bam_file,
                 args.input_fragment_file,
@@ -74,7 +74,7 @@ def main(args):
                 args.genome,
                 args.data_type,
                 ref_motifs_file)
-    
+
         print("Current estimated shift: {:+}/{:+}".format(plus_shift, minus_shift))
 
     else:
